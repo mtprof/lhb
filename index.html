@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, bijo!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0f0f11; /* Clean dark background to make the image pop */
+            color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Big Beautiful Birthday Header */
+        #birthday-header {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            text-align: center;
+            padding: 25px 15px;
+            background: linear-gradient(45deg, #ff758c, #ff7eb3, #fee140);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite, pulse 2s infinite alternate;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), padding 0.6s ease;
+            max-height: 160px;
+            opacity: 1;
+            width: 100%;
+            z-index: 10;
+        }
+
+        /* Class to hide the header forever on first click */
+        #birthday-header.hidden {
+            opacity: 0;
+            max-height: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        /* Fullscreen Image Container */
+        .image-container {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .birthday-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Keeps image sharp and filling the screen space nicely */
+            transition: transform 0.8s ease;
+        }
+
+        .image-container:hover .birthday-image {
+            transform: scale(1.02);
+        }
+
+        /* Opaque Interactive "Click to Play" Window Overlay */
+        .overlay-box {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 18px 36px;
+            border-radius: 50px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            pointer-events: none; /* Allows clicks to pass cleanly through to the container */
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            z-index: 5;
+        }
+
+        /* Fade settings for visual comfort when music is running */
+        .overlay-box.playing {
+            opacity: 0.15;
+            transform: scale(0.95);
+        }
+        
+        .image-container:hover .overlay-box.playing {
+            opacity: 0.8; /* Re-appears clearly if they hover over the image to pause */
+            transform: scale(1);
+        }
+
+        /* Keyframe Animations */
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.04); }
+        }
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 600px) {
+            #birthday-header {
+                font-size: 2.5rem;
+                padding: 15px 10px;
+            }
+            .overlay-box {
+                font-size: 1rem;
+                padding: 14px 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="birthday-header">Happy Birthday, bijo</h1>
+
+    <div class="image-container" id="click-zone">
+        <img src="image.png" alt="Birthday Image" class="birthday-image" id="bday-img">
+        <div class="overlay-box" id="overlay-text">Click to Play</div>
+    </div>
+
+    <audio id="bday-audio" src="audio.m4a" loop></audio>
+
+    <script>
+        const clickZone = document.getElementById('click-zone');
+        const audio = document.getElementById('bday-audio');
+        const header = document.getElementById('birthday-header');
+        const overlayText = document.getElementById('overlay-text');
+        
+        let isFirstClick = true;
+
+        clickZone.addEventListener('click', () => {
+            // 1. One-time overlay logic: Remove header text forever until refresh
+            if (isFirstClick) {
+                header.classList.add('hidden');
+                isFirstClick = false;
+            }
+
+            // 2. Play/Pause toggle logic
+            if (audio.paused) {
+                audio.play().catch(err => {
+                    console.log("Audio playback delayed or blocked by browser settings:", err);
+                });
+                overlayText.textContent = "Click to Pause";
+                overlayText.classList.add('playing');
+            } else {
+                audio.pause();
+                overlayText.textContent = "Click to Play";
+                overlayText.classList.remove('playing');
+            }
+        });
+    </script>
+</body>
+</html>
