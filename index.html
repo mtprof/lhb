@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
     
     <style>
         /* Reset and Base Styles */
@@ -17,7 +17,7 @@
             padding: 0;
         }
         body {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Cormorant Garamond', serif;
             background-color: #111111; /* Sleek dark background */
             color: #ffffff;
             display: flex;
@@ -30,21 +30,22 @@
 
         /* Static Elegant Header spanning full mobile width */
         #birthday-header {
-            font-family: 'Playfair Display', serif;
-            font-weight: 400;
-            font-size: 8.5vw; /* Scales perfectly to cover mobile screen width */
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic; /* Gives it that beautiful, subtle old handwritten calligraphic feel */
+            font-weight: 500;
+            font-size: 9.5vw; /* Scales beautifully across the entire width of mobile screens */
             text-align: center;
             width: 100%;
             padding: 20px 10px;
-            color: #ffffff; /* Just plain text, no color effects */
+            color: #ffffff; /* Plain white elegant text, no color effects */
             letter-spacing: 1px;
             white-space: nowrap;
         }
 
-        /* Responsive cap for desktop viewports so it doesn't get excessively huge */
+        /* Desktop optimization cap so text stays proportioned on larger screens */
         @media (min-width: 600px) {
             #birthday-header {
-                font-size: 3.5rem;
+                font-size: 4rem;
             }
         }
 
@@ -64,31 +65,25 @@
         .birthday-image {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures image fills the frame beautifully */
+            object-fit: cover; /* Beautiful fullscreen crop covering full mobile width */
         }
 
         /* Opaque Rectangle Window with slightly rounded corners */
         .overlay-box {
             position: absolute;
-            background: rgba(0, 0, 0, 0.65); /* Opaque window effect */
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.7); /* Slightly opaque black window */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 16px 32px;
-            border-radius: 6px; /* Rectangle with slightly rounded corners instead of a pill */
+            border-radius: 6px; /* Rectangle window with slight rounded corners */
             color: #ffffff;
-            font-family: sans-serif; /* Clean secondary font for button text clarity */
+            font-family: sans-serif; /* Clean font for absolute button readability */
             font-weight: bold;
             font-size: 1.1rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            pointer-events: none; /* Allows clicks to pass through to the image container */
-            transition: opacity 0.2s ease;
-        }
-
-        /* Utility class to hide the button when audio is playing */
-        .hidden {
-            display: none !important;
+            letter-spacing: 1.5px;
+            pointer-events: none; /* Let clicks pass directly into image container underneath */
         }
     </style>
 </head>
@@ -109,14 +104,18 @@
         const overlayText = document.getElementById('overlay-text');
 
         clickZone.addEventListener('click', () => {
+            // Permanently deletes the button element instantly on the very first click
+            if (document.getElementById('overlay-text')) {
+                overlayText.remove();
+            }
+
+            // Standard Play/Pause toggle logic
             if (audio.paused) {
                 audio.play().catch(err => {
                     console.log("Playback interaction error:", err);
                 });
-                overlayText.classList.add('hidden'); // Window disappears completely when playing
             } else {
                 audio.pause();
-                overlayText.classList.remove('hidden'); // Window reappears if paused again
             }
         });
     </script>
